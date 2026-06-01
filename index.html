@@ -306,10 +306,11 @@ async function carregarDados(){
 // ======================================================
 
 function atualizarCategorias(){
-
     const campus =
         document.getElementById("filtroCampus").value;
 
+    document.getElementById("filtroCategoria").value = "";
+    
     const curso =
         document.getElementById("filtroCurso").value;
 
@@ -398,12 +399,6 @@ function preencherFiltros(){
         )].sort();
 
     
-    
-    const categorias =
-        [...new Set(
-            dados.map(d => d.categoria)
-        )].sort();
-
     campi.forEach(campus => {
 
         campusSelect.innerHTML += `
@@ -414,15 +409,7 @@ function preencherFiltros(){
 
     });
 
-    categorias.forEach(cat => {
 
-        categoriaSelect.innerHTML += `
-            <option value="${cat}">
-                ${cat}
-            </option>
-        `;
-
-    });
     
     atualizarCategorias();
 }
