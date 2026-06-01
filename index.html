@@ -301,6 +301,76 @@ async function carregarDados(){
 
 }
 
+// ======================================================
+// PREENCHER FILTROS
+// ======================================================
+
+function atualizarCategorias(){
+
+    const campus =
+        document.getElementById("filtroCampus").value;
+
+    const curso =
+        document.getElementById("filtroCurso").value;
+
+    const categoriaSelect =
+        document.getElementById("filtroCategoria");
+
+    const categoriaAtual =
+        categoriaSelect.value;
+
+    categoriaSelect.innerHTML = `
+        <option value="">
+            Todas categorias
+        </option>
+    `;
+
+    let base = [...dados];
+
+    if(campus){
+
+        base = base.filter(
+            item => item.campus === campus
+        );
+
+    }
+
+    if(curso){
+
+        base = base.filter(
+            item => item.curso === curso
+        );
+
+    }
+
+    const categorias = [
+        ...new Set(
+            base
+                .map(item => item.categoria)
+                .filter(Boolean)
+        )
+    ].sort();
+
+    categorias.forEach(cat => {
+
+        categoriaSelect.innerHTML += `
+            <option value="${cat}">
+                ${cat}
+            </option>
+        `;
+
+    });
+
+    // Mantém a categoria selecionada se ela ainda existir
+    if(
+        categorias.includes(categoriaAtual)
+    ){
+        categoriaSelect.value =
+            categoriaAtual;
+    }
+
+}
+    
 
 // ======================================================
 // PREENCHER FILTROS
@@ -327,6 +397,8 @@ function preencherFiltros(){
             dados.map(d => d.campus)
         )].sort();
 
+    
+    
     const categorias =
         [...new Set(
             dados.map(d => d.categoria)
@@ -351,7 +423,8 @@ function preencherFiltros(){
         `;
 
     });
-
+    
+    atualizarCategorias();
 }
 
 // ======================================================
@@ -411,6 +484,7 @@ function atualizarCursosPorCampus(){
 
     });
 
+    atualizarCategorias();
     aplicarFiltros();
 
 }
@@ -580,7 +654,7 @@ document
 .getElementById("filtroCampus")
 .addEventListener(
     "change",
-    aplicarFiltros
+    atualizarCursosPorCampus
 );
 
 document
@@ -591,10 +665,16 @@ document
 );
     
 document
-.getElementById("filtroCampus")
+.getElementById("filtroCurso")
 .addEventListener(
     "change",
-    atualizarCursosPorCampus
+    () => {
+
+        atualizarCategorias();
+
+        aplicarFiltros();
+
+    }
 );
 
 // ======================================================
