@@ -230,9 +230,9 @@ body{
         </option>
     </select>
 
-    <select id="filtroCurso">
+    <select id="filtroCurso" disabled>
         <option value="">
-            Todos os cursos
+            Primeiro selecione um campus
         </option>
     </select>
 
@@ -352,26 +352,70 @@ function preencherFiltros(){
 
     });
 
-    const cursos =
-        [...new Set(
+}
+
+// ======================================================
+// Atualiza Cursos por Campus
+// ======================================================
+
+
+function atualizarCursosPorCampus(){
+
+    const campus =
+        document.getElementById("filtroCampus").value;
+
+    const cursoSelect =
+        document.getElementById("filtroCurso");
+
+    cursoSelect.innerHTML = "";
+
+    if(!campus){
+
+        cursoSelect.disabled = true;
+
+        cursoSelect.innerHTML = `
+            <option value="">
+                Primeiro selecione um campus
+            </option>
+        `;
+
+        aplicarFiltros();
+
+        return;
+    }
+
+    cursoSelect.disabled = false;
+
+    cursoSelect.innerHTML = `
+        <option value="">
+            Todos os cursos
+        </option>
+    `;
+
+    const cursos = [
+        ...new Set(
             dados
-                .map(d => d.curso)
-                .filter(c => c)
-        )].sort();
-    
+                .filter(item => item.campus === campus)
+                .map(item => item.curso)
+                .filter(Boolean)
+        )
+    ].sort();
+
     cursos.forEach(curso => {
-    
+
         cursoSelect.innerHTML += `
             <option value="${curso}">
                 ${curso}
             </option>
         `;
-    
+
     });
+
+    aplicarFiltros();
 
 }
 
-
+    
 // ======================================================
 // RENDERIZAR CARDS
 // ======================================================
@@ -472,10 +516,10 @@ function aplicarFiltros(){
             .getElementById("filtroCategoria")
             .value;
 
-    const curso =
+     const curso =
         document
             .getElementById("filtroCurso")
-            .value;
+            .value || "";
 
     const filtrados =
         dados.filter(item => {
@@ -547,10 +591,10 @@ document
 );
     
 document
-.getElementById("filtroCurso")
+.getElementById("filtroCampus")
 .addEventListener(
     "change",
-    aplicarFiltros
+    atualizarCursosPorCampus
 );
 
 // ======================================================
