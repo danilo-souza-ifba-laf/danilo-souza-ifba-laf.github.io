@@ -492,17 +492,17 @@ function aplicarFiltros(){
                 .toLowerCase()
                 .includes(busca);
 
-            const matchCampus =
-                !campus
-                || item.campus === campus;
-
             const matchCurso =
                 !curso
-                || item.curso === curso;
-
+                || item.curso?.trim() === curso.trim();
+            
+            const matchCampus =
+                !campus
+                || item.campus?.trim() === campus.trim();
+            
             const matchCategoria =
                 !categoria
-                || item.categoria === categoria;
+                || item.categoria?.trim() === categoria.trim();
 
             return (
                 matchBusca
