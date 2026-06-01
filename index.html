@@ -51,8 +51,9 @@ body{
     display:grid;
     grid-template-columns:
         1fr
-        240px
-        240px;
+        220px
+        220px
+        220px;
     gap:15px;
     margin-bottom:30px;
 }
@@ -220,12 +221,18 @@ body{
     <input
         type="text"
         id="busca"
-        placeholder="Buscar documentos, cursos ou campi..."
+        placeholder="Buscar documentos..."
     >
 
     <select id="filtroCampus">
         <option value="">
             Todos os campi
+        </option>
+    </select>
+
+    <select id="filtroCurso">
+        <option value="">
+            Todos os cursos
         </option>
     </select>
 
@@ -310,6 +317,10 @@ function preencherFiltros(){
         document.getElementById(
             "filtroCategoria"
         );
+    const cursoSelect =
+        document.getElementById(
+        "filtroCurso"
+    );
 
     const campi =
         [...new Set(
@@ -339,6 +350,23 @@ function preencherFiltros(){
             </option>
         `;
 
+    });
+
+    const cursos =
+        [...new Set(
+            dados
+                .map(d => d.curso)
+                .filter(c => c)
+        )].sort();
+    
+    cursos.forEach(curso => {
+    
+        cursoSelect.innerHTML += `
+            <option value="${curso}">
+                ${curso}
+            </option>
+        `;
+    
     });
 
 }
@@ -447,6 +475,15 @@ function aplicarFiltros(){
                 "filtroCategoria"
             )
             .value;
+    
+    const curso =
+        document
+            .getElementById("filtroCurso")
+            .value;
+    
+    const matchCurso =
+        !curso
+        || item.curso === curso;
 
     const filtrados =
         dados.filter(item => {
@@ -475,6 +512,8 @@ function aplicarFiltros(){
                 matchBusca
                 &&
                 matchCampus
+                &&
+                matchCurso
                 &&
                 matchCategoria
             );
@@ -510,7 +549,13 @@ document
     "change",
     aplicarFiltros
 );
-
+    
+document
+.getElementById("filtroCurso")
+.addEventListener(
+    "change",
+    aplicarFiltros
+);
 
 // ======================================================
 // INICIAR
