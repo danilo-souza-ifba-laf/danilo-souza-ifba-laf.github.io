@@ -464,45 +464,41 @@ function aplicarFiltros(){
 
     const campus =
         document
-            .getElementById(
-                "filtroCampus"
-            )
+            .getElementById("filtroCampus")
             .value;
 
     const categoria =
         document
-            .getElementById(
-                "filtroCategoria"
-            )
+            .getElementById("filtroCategoria")
             .value;
-    
+
     const curso =
         document
             .getElementById("filtroCurso")
             .value;
-    
-    const matchCurso =
-        !curso
-        || item.curso === curso;
 
     const filtrados =
         dados.filter(item => {
 
             const matchBusca =
 
-                item.titulo
+                (item.titulo || "")
                 .toLowerCase()
                 .includes(busca)
 
                 ||
 
-                item.curso
+                (item.curso || "")
                 .toLowerCase()
                 .includes(busca);
 
             const matchCampus =
                 !campus
                 || item.campus === campus;
+
+            const matchCurso =
+                !curso
+                || item.curso === curso;
 
             const matchCategoria =
                 !categoria
